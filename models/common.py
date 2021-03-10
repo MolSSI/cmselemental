@@ -4,8 +4,7 @@ from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 import numpy
 from pydantic import Field
 
-from .basemodels import ProtoModel, qcschema_draft
-from .basis import BasisSet
+from .base import ProtoModel, qcschema_draft
 
 if TYPE_CHECKING:
     from pydantic.typing import ReprArgs
@@ -31,28 +30,6 @@ class Provenance(ProtoModel):
 
         def schema_extra(schema, model):
             schema["$schema"] = qcschema_draft
-
-
-class Model(ProtoModel):
-    """The computational molecular sciences model to run."""
-
-    method: str = Field(  # type: ignore
-        ...,
-        description="The quantum chemistry method to evaluate (e.g., B3LYP, PBE, ...). "
-        "For MM, name of the force field.",
-    )
-    basis: Optional[Union[str, BasisSet]] = Field(  # type: ignore
-        None,
-        description="The quantum chemistry basis set to evaluate (e.g., 6-31g, cc-pVDZ, ...). Can be ``None`` for "
-        "methods without basis sets. For molecular mechanics, name of the atom-typer.",
-    )
-
-    # basis_spec: BasisSpec = None  # This should be exclusive with basis, but for now will be omitted
-
-    class Config(ProtoModel.Config):
-        canonical_repr = True
-        extra: str = "allow"
-
 
 class DriverEnum(str, Enum):
     """Allowed computation driver values."""

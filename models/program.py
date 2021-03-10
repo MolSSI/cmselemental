@@ -1,10 +1,10 @@
 import abc
 from typing import Any, Dict, List, Optional, Tuple
-from .config import TaskConfig
-from qcelemental import models
+from ..util.config import TaskConfig
+from .base import ProtoModel
 from pydantic import Field
 
-class ProgramHarness(models.ProtoModel, abc.ABC):
+class ProgramHarness(ProtoModel, abc.ABC):
 
     name: str = Field(
         ..., 
@@ -45,14 +45,14 @@ class ProgramHarness(models.ProtoModel, abc.ABC):
 
     @classmethod
     def input(cls):
-        return models.ProtoModel
+        return ProtoModel
 
     @classmethod
     def output(cls):
-        return models.ProtoModel
+        return ProtoModel
 
     @classmethod
-    def compute(cls, input_data: models.ProtoModel, config: TaskConfig = None) -> models.ProtoModel:
+    def compute(cls, input_data: ProtoModel, config: TaskConfig = None) -> ProtoModel:
         raise NotImplementedError
 
     @staticmethod
@@ -81,7 +81,7 @@ class ProgramHarness(models.ProtoModel, abc.ABC):
 
     ## Computers
     def build_input(
-        self, input_model: models.ProtoModel, config: TaskConfig = None, template: Optional[str] = None
+        self, input_model: ProtoModel, config: TaskConfig = None, template: Optional[str] = None
     ) -> Dict[str, Any]:
         raise NotImplementedError("build_input is not implemented for {}.", self.__class__)
 
@@ -95,5 +95,5 @@ class ProgramHarness(models.ProtoModel, abc.ABC):
     ) -> Tuple[bool, Dict[str, Any]]:
         raise NotImplementedError("execute is not implemented for {}.", self.__class__)
 
-    def parse_output(self, outfiles: Dict[str, str], input_model: models.ProtoModel) -> models.ProtoModel:
+    def parse_output(self, outfiles: Dict[str, str], input_model: ProtoModel) -> ProtoModel:
         raise NotImplementedError("parse_output is not implemented for {}.", self.__class__)

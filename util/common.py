@@ -19,7 +19,7 @@ from threading import Thread
 from typing import Any, BinaryIO, Dict, List, Optional, TextIO, Tuple, Union
 
 from pydantic import ValidationError
-from ..models import FailedOperation
+from ..models.common import FailedOperation
 
 from .config import TaskConfig
 
