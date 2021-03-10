@@ -5,8 +5,10 @@ from cmselemental.models import ProtoModel
 class Model(ProtoModel):
     ...
 
-stringified = Model.json()
-data = Model.dict()
+obj = Model(...)
+is_same = obj.compare(other_obj)
+stringified = obj.json()
+data = obj.dict()
 ```
 
 # Serialization/deserialization
