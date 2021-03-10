@@ -2,6 +2,7 @@
 ```python
 from cmselemental.models import ProtoModel
 
+
 class Model(ProtoModel):
     ...
 
@@ -15,6 +16,7 @@ data = obj.dict()
 ```python
 from cmselemental.util import serialize, deserialize
 
+
 stringified = serialize(data, encodding="json", indent=4)
 data = deserialize(stringified, encoding="json")
 ```
@@ -23,6 +25,7 @@ data = deserialize(stringified, encoding="json")
 ```python
 from cmselemental.util.common import execute, temporary_directory
 from cmselemental.util.importing import which
+
 
 with temporary_directory(parent=parent, suffix="_psi_scratch") as tmpdir:
  
