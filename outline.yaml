@@ -11,7 +11,7 @@ LogP:
 
 - III: Free energy calculation
     - Compute the solvation (Gibb's) free energy
-    - Compute the transfer (Gibb's) free energy: deduce the logP
+    - Compute the transfer (Gibb's) free energy (deduce the logP)
 
 code: github.com/mobleylab/SolvationToolkit
 
