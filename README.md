@@ -11,22 +11,6 @@ is_same = obj.compare(other_obj)
 stringified = obj.json()
 data = obj.dict()
 ```
-```python
-from cmselemental.models import ProgramHarness
-
-
-class GenericComponent(ProgramHarness):
-
-    @classmethod
-    def input(cls):
-        return Model
-
-    @classmethod
-    def output(cls):
-        return Model
-    
-    ...
-```
 
 # Serialization/deserialization
 ```python
