@@ -11,7 +11,7 @@ from typing import Any, Dict, Optional, Union
 
 import pydantic
 
-from .extras import get_information
+from ..extras import get_information
 
 __all__ = ["get_config", "get_provenance_augments", "global_repr", "NodeDescriptor"]
 
