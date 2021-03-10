@@ -2,6 +2,7 @@ LogP:
 =====
 -  I: Select a scientific model i.e. make assumptions
     - e.g. the 2 solvents are completely immiscible
+    - e.g. the system is infinitely diluted
 
 - II: Setup system
     - Create mixture -> depends on stage I
@@ -10,8 +11,7 @@ LogP:
 
 - III: Free energy calculation
     - Compute the solvation (Gibb's) free energy
-    - Compute the hydration (Gibb's) free energy
-    - Compute the transfer (Gibb's) free energy and the logP
+    - Compute the transfer (Gibb's) free energy: deduce the logP
 
 code: github.com/mobleylab/SolvationToolkit
 
