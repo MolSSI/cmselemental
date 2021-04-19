@@ -24,11 +24,15 @@ def type_to_string(input_type):
 
 def is_pydantic(test_object):
     try:
-        instance = isinstance(test_object, BaseSettings) or isinstance(test_object, BaseModel)
+        instance = isinstance(test_object, BaseSettings) or isinstance(
+            test_object, BaseModel
+        )
     except TypeError:
         instance = False
     try:
-        subclass = issubclass(test_object, BaseSettings) or issubclass(test_object, BaseModel)
+        subclass = issubclass(test_object, BaseSettings) or issubclass(
+            test_object, BaseModel
+        )
     except TypeError:
         subclass = False
     return instance or subclass
@@ -52,7 +56,9 @@ def parse_type_str(prop) -> str:
     if type(prop) is type or prop.__module__ == "typing":
         # True native Python type
         prop_type_str = type_to_string(prop)
-    elif issubclass(prop.type_.__class__, Enum) or issubclass(prop.type_.__class__, EnumMeta):
+    elif issubclass(prop.type_.__class__, Enum) or issubclass(
+        prop.type_.__class__, EnumMeta
+    ):
         # Enumerate, have to do the __class__ or issubclass(prop.type_) throws issues later.
         prop_type_str = "{" + ",".join([str(x.value) for x in prop.type_]) + "}"
     elif type(prop.type_) is type and prop.shape == fields.SHAPE_SINGLETON:
@@ -68,7 +74,9 @@ def parse_type_str(prop) -> str:
         sub_fields = prop.sub_fields
         # Special case of Optional[]
         # if sub_fields is not None and any([sf.sub_fields is type(None) for sf in sub_fields]):
-        if sub_fields is not None and any([sf.type_ is type(None) for sf in sub_fields]):
+        if sub_fields is not None and any(
+            [sf.type_ is type(None) for sf in sub_fields]
+        ):
             reconstructed_props = [f for f in sub_fields if f.type_ is not type(None)]
             parsed_types = [parse_type_str(f) for f in reconstructed_props]
             if len(parsed_types) == 1:
@@ -76,10 +84,21 @@ def parse_type_str(prop) -> str:
             else:
                 prop_type_str = "Union[" + ", ".join(parsed_types) + "]"
         elif prop.shape == fields.SHAPE_MAPPING:
-            prop_type_str = "Dict[" + parse_type_str(key_field) + ", " + parse_type_str(prop.type_) + "]"
+            prop_type_str = (
+                "Dict["
+                + parse_type_str(key_field)
+                + ", "
+                + parse_type_str(prop.type_)
+                + "]"
+            )
         elif sub_fields is not None:
             # Not "optional", but iterable
-            prop_type_str = typing_map[prop.shape] + "[" + ", ".join([parse_type_str(sf) for sf in sub_fields]) + "]"
+            prop_type_str = (
+                typing_map[prop.shape]
+                + "["
+                + ", ".join([parse_type_str(sf) for sf in sub_fields])
+                + "]"
+            )
         elif prop.type_ is Any:
             prop_type_str = "Any"
     elif "ConstrainedInt" in prop.type_.__name__:
@@ -93,10 +112,15 @@ def parse_type_str(prop) -> str:
                 # A bit of a catch-all
                 prop_type_str = prop.type_.__name__
             else:
-                prop_type_str = typing_map[prop.shape] + "[" + parse_type_str(prop.type_) + "]"
+                prop_type_str = (
+                    typing_map[prop.shape] + "[" + parse_type_str(prop.type_) + "]"
+                )
         else:
             prop_type_str = (
-                typing_map[prop.shape] + "[" + ", ".join([parse_type_str(sf) for sf in prop.sub_fields]) + "]"
+                typing_map[prop.shape]
+                + "["
+                + ", ".join([parse_type_str(sf) for sf in prop.sub_fields])
+                + "]"
             )
     else:
         # Finally, with nothing else to do...
@@ -105,7 +129,9 @@ def parse_type_str(prop) -> str:
     return prop_type_str
 
 
-def doc_formatter(base_docs: str, target_object: BaseModel, allow_failure: bool = True) -> str:
+def doc_formatter(
+    base_docs: str, target_object: BaseModel, allow_failure: bool = True
+) -> str:
     """
     Generate the docstring for a Pydantic object automatically based on the parameters
     This could use improvement.
@@ -119,7 +145,9 @@ def doc_formatter(base_docs: str, target_object: BaseModel, allow_failure: bool 
         doc_edit = base_docs
 
     # Is pydantic and not already formatted
-    if is_pydantic(target_object) and not re.search(r"^\s*Parameters\n", doc_edit, re.MULTILINE):
+    if is_pydantic(target_object) and not re.search(
+        r"^\s*Parameters\n", doc_edit, re.MULTILINE
+    ):
         try:
             # Add the white space
             if not doc_edit.endswith("\n\n"):
@@ -140,12 +168,16 @@ def doc_formatter(base_docs: str, target_object: BaseModel, allow_failure: bool 
                 # name : type(, Optional, Default)
                 #   description
                 first_line = prop_name + " : " + prop_type_str
-                if not prop.required and (prop.default is None or is_pydantic(prop.default)):
+                if not prop.required and (
+                    prop.default is None or is_pydantic(prop.default)
+                ):
                     first_line += ", Optional"
                 elif prop.default is not None:
                     first_line += f", Default: {prop.default}"
                 # Write the prop description
-                second_line = "\n" + indent(prop_desc, "    ") if prop_desc is not None else ""
+                second_line = (
+                    "\n" + indent(prop_desc, "    ") if prop_desc is not None else ""
+                )
                 # Finally, write the detailed doc string
                 new_doc += first_line + second_line + "\n"
         except:  # lgtm [py/catch-base-exception]
@@ -170,11 +202,15 @@ class AutoPydanticDocGenerator:
     ALREADY_AUTODOCED_ATTR = "__model_autodoc_applied__"
     AUTODOC_BASE_DOC_REFERENCE_ATTR = "__base_doc__"
 
-    def __init__(self, target: BaseModel, allow_failure: bool = True, always_apply: bool = False):
+    def __init__(
+        self, target: BaseModel, allow_failure: bool = True, always_apply: bool = False
+    ):
         # Checks against already instanced and uninstanced classes while avoiding unhahsable type error
 
         if not always_apply:
-            if isinstance(target, BaseModel) or (isinstance(target, type) and issubclass(target, BaseModel)):
+            if isinstance(target, BaseModel) or (
+                isinstance(target, type) and issubclass(target, BaseModel)
+            ):
 
                 if (
                     hasattr(target, self.ALREADY_AUTODOCED_ATTR)
@@ -195,7 +231,9 @@ class AutoPydanticDocGenerator:
         self.allow_failure = allow_failure
 
     def __get__(self, *args):
-        return doc_formatter(self.base_doc, self.target, allow_failure=self.allow_failure)
+        return doc_formatter(
+            self.base_doc, self.target, allow_failure=self.allow_failure
+        )
 
     def __del__(self):
         try:
@@ -209,7 +247,10 @@ class AutoPydanticDocGenerator:
 
 
 def auto_gen_docs_on_demand(
-    target: BaseModel, allow_failure: bool = True, ignore_reapply: bool = True, force_reapply: bool = False
+    target: BaseModel,
+    allow_failure: bool = True,
+    ignore_reapply: bool = True,
+    force_reapply: bool = False,
 ):
     """Tell a Pydantic base model to generate its docstrings on the fly with the tech here """
     try:
@@ -222,7 +263,12 @@ def auto_gen_docs_on_demand(
     # Reapply by force to allow inherited models to auto doc as well
     if force_reapply:
         del target.__doc__
-        auto_gen_docs_on_demand(target, allow_failure=allow_failure, ignore_reapply=ignore_reapply, force_reapply=False)
+        auto_gen_docs_on_demand(
+            target,
+            allow_failure=allow_failure,
+            ignore_reapply=ignore_reapply,
+            force_reapply=False,
+        )
 
 
 def get_base_docs(target: object):

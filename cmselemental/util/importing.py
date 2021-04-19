@@ -35,7 +35,10 @@ def which_import(
         module_spec = None
 
     # module_spec.origin is 'namespace' for py36, None for >=py37
-    namespace_package = module_spec is not None and module_spec.origin in [None, "namespace"]
+    namespace_package = module_spec is not None and module_spec.origin in [
+        None,
+        "namespace",
+    ]
 
     if (module_spec is None) or (namespace_package and not namespace_ok):
         if raise_error:
@@ -57,7 +60,12 @@ def which_import(
 
 
 def which(
-    command: str, *, return_bool: bool = False, raise_error: bool = False, raise_msg: str = None, env: str = None
+    command: str,
+    *,
+    return_bool: bool = False,
+    raise_error: bool = False,
+    raise_msg: str = None,
+    env: str = None,
 ) -> Union[bool, None, str]:
     """Test to see if a command is available.
     Returns
@@ -73,9 +81,17 @@ def which(
         When `raises_error=True` and command not found. Raises generic message plus any `raise_msg`.
     """
     if env is None:
-        lenv = {"PATH": os.pathsep + os.environ.get("PATH", "") + os.path.dirname(sys.executable)}
+        lenv = {
+            "PATH": os.pathsep
+            + os.environ.get("PATH", "")
+            + os.path.dirname(sys.executable)
+        }
     else:
-        lenv = {"PATH": os.pathsep.join([os.path.abspath(x) for x in env.split(os.pathsep) if x != ""])}
+        lenv = {
+            "PATH": os.pathsep.join(
+                [os.path.abspath(x) for x in env.split(os.pathsep) if x != ""]
+            )
+        }
     lenv = {k: v for k, v in lenv.items() if v is not None}
 
     ans = shutil.which(command, mode=os.F_OK | os.X_OK, path=lenv["PATH"])

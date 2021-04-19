@@ -55,7 +55,9 @@ class ProtoModel(BaseModel):
             elif isinstance(data, bytes):
                 encoding = "msgpack-ext"
             else:
-                raise TypeError("Input is neither str nor bytes, please specify an encoding.")
+                raise TypeError(
+                    "Input is neither str nor bytes, please specify an encoding."
+                )
 
         if encoding.endswith(("json", "javascript", "pickle")):
             return super().parse_raw(data, content_type=encoding)
@@ -90,7 +92,9 @@ class ProtoModel(BaseModel):
             elif path.suffix in [".pickle"]:
                 encoding = "pickle"
             else:
-                raise TypeError("Could not infer `encoding`, please provide a `encoding` for this file.")
+                raise TypeError(
+                    "Could not infer `encoding`, please provide a `encoding` for this file."
+                )
 
         return cls.parse_raw(path.read_bytes(), encoding=encoding)
 
@@ -111,7 +115,9 @@ class ProtoModel(BaseModel):
         elif encoding == "json":
             return json.loads(serialize(data, encoding="json"))
         else:
-            raise KeyError(f"Unknown encoding type '{encoding}', valid encoding types: 'json'.")
+            raise KeyError(
+                f"Unknown encoding type '{encoding}', valid encoding types: 'json'."
+            )
 
     def serialize(
         self,

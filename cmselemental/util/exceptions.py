@@ -1,6 +1,7 @@
 import traceback
 from typing import Any, Dict, Optional
 
+
 class QCEngineException(Exception):
     """
     Base QCEngine exception, should never be called explicitly.
@@ -85,7 +86,9 @@ class KnownErrorException(QCEngineException):
 
     error_name: str  # Unique name for this error. Used in autodetection logic
     description: str  # Human-readable description of the error.
-    details: Optional[Dict[str, Any]]  # Any details for this error. Used for user feedback and autocorrection logic
+    details: Optional[
+        Dict[str, Any]
+    ]  # Any details for this error. Used for user feedback and autocorrection logic
 
     def __init__(self, details: Optional[dict] = None):
         super().__init__(self.description)

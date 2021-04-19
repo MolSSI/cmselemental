@@ -17,12 +17,18 @@ ndarray_encoder = {numpy.ndarray: lambda v: v.flatten().tolist()}
 class Provenance(ProtoModel):
     """Provenance information."""
 
-    creator: str = Field(..., description="The name of the program, library, or person who created the object.")
+    creator: str = Field(
+        ...,
+        description="The name of the program, library, or person who created the object.",
+    )
     version: str = Field(
         "",
         description="The version of the creator, blank otherwise. This should be sortable by the very broad [PEP 440](https://www.python.org/dev/peps/pep-0440/).",
     )
-    routine: str = Field("", description="The name of the routine or function within the creator, blank otherwise.")
+    routine: str = Field(
+        "",
+        description="The name of the routine or function within the creator, blank otherwise.",
+    )
 
     class Config(ProtoModel.Config):
         canonical_repr = True
@@ -30,6 +36,7 @@ class Provenance(ProtoModel):
 
         def schema_extra(schema, model):
             schema["$schema"] = qcschema_draft
+
 
 class DriverEnum(str, Enum):
     """Allowed computation driver values."""

@@ -26,4 +26,8 @@ def provenance_stamp(creator, routine):
     with QCEngine's credentials for creator and version. The
     generating routine's name is passed in through `routine`.
     """
-    return {"creator": creator, "version": get_information("version"), "routine": routine}
+    return {
+        "creator": creator,
+        "version": get_information("version"),
+        "routine": routine,
+    }

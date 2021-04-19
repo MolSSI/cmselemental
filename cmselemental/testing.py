@@ -10,7 +10,9 @@ from pydantic import BaseModel
 pp = pprint.PrettyPrinter(width=120)
 
 
-def _handle_return(passfail: bool, label: str, message: str, return_message: bool, quiet: bool = False):
+def _handle_return(
+    passfail: bool, label: str, message: str, return_message: bool, quiet: bool = False
+):
     """Function to print a '*label*...PASSED' line to log."""
 
     if not quiet:
@@ -104,10 +106,16 @@ def compare_values(
         dtype = float
 
     try:
-        xptd, cptd = numpy.array(expected, dtype=dtype), numpy.array(computed, dtype=dtype)
+        xptd, cptd = numpy.array(expected, dtype=dtype), numpy.array(
+            computed, dtype=dtype
+        )
     except Exception:
         return return_handler(
-            False, label, f"""\t{label}: inputs not cast-able to ndarray of {dtype}.""", return_message, quiet
+            False,
+            label,
+            f"""\t{label}: inputs not cast-able to ndarray of {dtype}.""",
+            return_message,
+            quiet,
         )
 
     if xptd.shape != cptd.shape:
@@ -128,7 +136,9 @@ def compare_values(
     allclose = bool(numpy.all(isclose))
 
     if not allclose and equal_phase and hasattr(cptd, "__neg__"):
-        n_isclose = numpy.isclose(-cptd, xptd, rtol=rtol, atol=atol, equal_nan=equal_nan)
+        n_isclose = numpy.isclose(
+            -cptd, xptd, rtol=rtol, atol=atol, equal_nan=equal_nan
+        )
         allclose = bool(numpy.all(n_isclose))
 
     if allclose:
@@ -138,13 +148,17 @@ def compare_values(
         if xptd.shape == ():
             xptd_str = f"{float(xptd):.{digits1}f}"
         else:
-            xptd_str = numpy.array_str(xptd, max_line_width=120, precision=12, suppress_small=True)
+            xptd_str = numpy.array_str(
+                xptd, max_line_width=120, precision=12, suppress_small=True
+            )
             xptd_str = "\n".join("    " + ln for ln in xptd_str.splitlines())
 
         if cptd.shape == ():
             cptd_str = f"{float(cptd):.{digits1}f}"
         else:
-            cptd_str = numpy.array_str(cptd, max_line_width=120, precision=12, suppress_small=True)
+            cptd_str = numpy.array_str(
+                cptd, max_line_width=120, precision=12, suppress_small=True
+            )
             cptd_str = "\n".join("    " + ln for ln in cptd_str.splitlines())
 
         diff = cptd - xptd
@@ -155,7 +169,9 @@ def compare_values(
             )
         else:
             diff[isclose] = 0.0
-            diff_str = numpy.array_str(diff, max_line_width=120, precision=12, suppress_small=False)
+            diff_str = numpy.array_str(
+                diff, max_line_width=120, precision=12, suppress_small=False
+            )
             diff_str = "\n".join("    " + ln for ln in diff_str.splitlines())
             message = """\t{}: computed value does not match {}.\n  Expected:\n{}\n  Observed:\n{}\n  Difference (passed elements are zeroed):\n{}\n""".format(
                 label, digits_str, xptd_str, cptd_str, diff_str
@@ -210,7 +226,13 @@ def compare(
     try:
         xptd, cptd = numpy.array(expected), numpy.array(computed)
     except Exception:
-        return return_handler(False, label, f"""\t{label}: inputs not cast-able to ndarray.""", return_message, quiet)
+        return return_handler(
+            False,
+            label,
+            f"""\t{label}: inputs not cast-able to ndarray.""",
+            return_message,
+            quiet,
+        )
 
     if xptd.shape != cptd.shape:
         return return_handler(
@@ -239,13 +261,17 @@ def compare(
         if xptd.shape == ():
             xptd_str = f"{xptd}"
         else:
-            xptd_str = numpy.array_str(xptd, max_line_width=120, precision=12, suppress_small=True)
+            xptd_str = numpy.array_str(
+                xptd, max_line_width=120, precision=12, suppress_small=True
+            )
             xptd_str = "\n".join("    " + ln for ln in xptd_str.splitlines())
 
         if cptd.shape == ():
             cptd_str = f"{cptd}"
         else:
-            cptd_str = numpy.array_str(cptd, max_line_width=120, precision=12, suppress_small=True)
+            cptd_str = numpy.array_str(
+                cptd, max_line_width=120, precision=12, suppress_small=True
+            )
             cptd_str = "\n".join("    " + ln for ln in cptd_str.splitlines())
 
         try:
@@ -256,7 +282,9 @@ def compare(
             if xptd.shape == ():
                 diff_str = f"{diff}"
             else:
-                diff_str = numpy.array_str(diff, max_line_width=120, precision=12, suppress_small=False)
+                diff_str = numpy.array_str(
+                    diff, max_line_width=120, precision=12, suppress_small=False
+                )
                 diff_str = "\n".join("    " + ln for ln in diff_str.splitlines())
 
         if xptd.shape == ():
@@ -271,7 +299,9 @@ def compare(
     return return_handler(allclose, label, message, return_message, quiet)
 
 
-def _compare_recursive(expected, computed, atol, rtol, _prefix=False, equal_phase=False):
+def _compare_recursive(
+    expected, computed, atol, rtol, _prefix=False, equal_phase=False
+):
 
     errors = []
     name = _prefix or "root"
@@ -286,7 +316,9 @@ def _compare_recursive(expected, computed, atol, rtol, _prefix=False, equal_phas
 
     if isinstance(expected, (str, int, bool, complex)):
         if expected != computed:
-            errors.append((name, "Value {} did not match {}.".format(expected, computed)))
+            errors.append(
+                (name, "Value {} did not match {}.".format(expected, computed))
+            )
 
     elif isinstance(expected, (list, tuple)):
         try:
@@ -296,7 +328,12 @@ def _compare_recursive(expected, computed, atol, rtol, _prefix=False, equal_phas
                 for i, item1, item2 in zip(range(len(expected)), expected, computed):
                     errors.extend(
                         _compare_recursive(
-                            item1, item2, _prefix=prefix + str(i), atol=atol, rtol=rtol, equal_phase=equal_phase
+                            item1,
+                            item2,
+                            _prefix=prefix + str(i),
+                            atol=atol,
+                            rtol=rtol,
+                            equal_phase=equal_phase,
                         )
                     )
         except TypeError:
@@ -314,13 +351,24 @@ def _compare_recursive(expected, computed, atol, rtol, _prefix=False, equal_phas
             name = prefix + str(k)
             errors.extend(
                 _compare_recursive(
-                    expected[k], computed[k], _prefix=name, atol=atol, rtol=rtol, equal_phase=equal_phase
+                    expected[k],
+                    computed[k],
+                    _prefix=name,
+                    atol=atol,
+                    rtol=rtol,
+                    equal_phase=equal_phase,
                 )
             )
 
     elif isinstance(expected, (float, numpy.number)):
         passfail, msg = compare_values(
-            expected, computed, atol=atol, rtol=rtol, equal_phase=equal_phase, return_message=True, quiet=True
+            expected,
+            computed,
+            atol=atol,
+            rtol=rtol,
+            equal_phase=equal_phase,
+            return_message=True,
+            quiet=True,
         )
         if not passfail:
             errors.append((name, "Arrays differ." + msg))
@@ -328,10 +376,22 @@ def _compare_recursive(expected, computed, atol, rtol, _prefix=False, equal_phas
     elif isinstance(expected, numpy.ndarray):
         if numpy.issubdtype(expected.dtype, numpy.floating):
             passfail, msg = compare_values(
-                expected, computed, atol=atol, rtol=rtol, equal_phase=equal_phase, return_message=True, quiet=True
+                expected,
+                computed,
+                atol=atol,
+                rtol=rtol,
+                equal_phase=equal_phase,
+                return_message=True,
+                quiet=True,
             )
         else:
-            passfail, msg = compare(expected, computed, equal_phase=equal_phase, return_message=True, quiet=True)
+            passfail, msg = compare(
+                expected,
+                computed,
+                equal_phase=equal_phase,
+                return_message=True,
+                quiet=True,
+            )
         if not passfail:
             errors.append((name, "Arrays differ." + msg))
 
@@ -340,7 +400,12 @@ def _compare_recursive(expected, computed, atol, rtol, _prefix=False, equal_phas
             errors.append((name, "'None' does not match."))
 
     else:
-        errors.append((name, f"Type {type(expected)} not understood -- stopping recursive compare."))
+        errors.append(
+            (
+                name,
+                f"Type {type(expected)} not understood -- stopping recursive compare.",
+            )
+        )
 
     return errors
 
@@ -400,7 +465,9 @@ def compare_recursive(
     errors = _compare_recursive(expected, computed, atol=atol, rtol=rtol)
 
     if errors and equal_phase:
-        n_errors = _compare_recursive(expected, computed, atol=atol, rtol=rtol, equal_phase=True)
+        n_errors = _compare_recursive(
+            expected, computed, atol=atol, rtol=rtol, equal_phase=True
+        )
         n_errors = dict(n_errors)
 
         if equal_phase is False:
@@ -408,7 +475,9 @@ def compare_recursive(
         elif equal_phase is True:
             equal_phase = list(dict(errors).keys())
         else:
-            equal_phase = [(ep if ep.startswith("root.") else "root." + ep) for ep in equal_phase]
+            equal_phase = [
+                (ep if ep.startswith("root.") else "root." + ep) for ep in equal_phase
+            ]
         phased = []
 
         for nomatch in sorted(errors):
@@ -444,7 +513,9 @@ def compare_recursive(
 
     ret_msg_str = "\n".join(message)
 
-    return return_handler(len(ret_msg_str) == 0, label, ret_msg_str, return_message, quiet)
+    return return_handler(
+        len(ret_msg_str) == 0, label, ret_msg_str, return_message, quiet
+    )
 
 
 def compare_molrecs(
@@ -479,13 +550,18 @@ def compare_molrecs(
         #     dicary['fragment_multiplicities'] = [(m if m is None else int(m))
         #                                          for m in dicary['fragment_multiplicities']]
         if "fragment_separators" in dicary:
-            dicary["fragment_separators"] = [(s if s is None else int(s)) for s in dicary["fragment_separators"]]
+            dicary["fragment_separators"] = [
+                (s if s is None else int(s)) for s in dicary["fragment_separators"]
+            ]
         # forgive generator version changes
         if "provenance" in dicary:
             dicary["provenance"].pop("version")
         # regularize connectivity ordering
         if "connectivity" in dicary:
-            conn = [(min(at1, at2), max(at1, at2), bo) for (at1, at2, bo) in dicary["connectivity"]]
+            conn = [
+                (min(at1, at2), max(at1, at2), bo)
+                for (at1, at2, bo) in dicary["connectivity"]
+            ]
             conn.sort(key=lambda tup: tup[0])
             dicary["connectivity"] = conn
 

@@ -37,7 +37,11 @@ def msgpackext_encode(obj: Any) -> Any:
 
     if isinstance(obj, np.ndarray):
         if obj.shape:
-            data = {b"_nd_": True, b"dtype": obj.dtype.str, b"data": np.ascontiguousarray(obj).tobytes()}
+            data = {
+                b"_nd_": True,
+                b"dtype": obj.dtype.str,
+                b"data": np.ascontiguousarray(obj).tobytes(),
+            }
             if len(obj.shape) > 1:
                 data[b"shape"] = obj.shape
             return data
@@ -117,7 +121,11 @@ class JSONExtArrayEncoder(json.JSONEncoder):
 
         if isinstance(obj, np.ndarray):
             if obj.shape:
-                data = {"_nd_": True, "dtype": obj.dtype.str, "data": np.ascontiguousarray(obj).tobytes().hex()}
+                data = {
+                    "_nd_": True,
+                    "dtype": obj.dtype.str,
+                    "data": np.ascontiguousarray(obj).tobytes().hex(),
+                }
                 if len(obj.shape) > 1:
                     data["shape"] = obj.shape
                 return data
@@ -245,7 +253,9 @@ def serialize(data: Any, encoding: str) -> Union[str, bytes]:
     elif encoding.lower() == "msgpack-ext":
         return msgpackext_dumps(data)
     else:
-        raise KeyError(f"Encoding '{encoding}' not understood, valid options: 'json', 'json-ext', 'msgpack-ext'")
+        raise KeyError(
+            f"Encoding '{encoding}' not understood, valid options: 'json', 'json-ext', 'msgpack-ext'"
+        )
 
 
 def deserialize(blob: Union[str, bytes], encoding: str) -> Any:
@@ -271,4 +281,6 @@ def deserialize(blob: Union[str, bytes], encoding: str) -> Any:
         assert isinstance(blob, bytes)
         return msgpackext_loads(blob)
     else:
-        raise KeyError(f"Encoding '{encoding}' not understood, valid options: 'json', 'json-ext', 'msgpack-ext'")
+        raise KeyError(
+            f"Encoding '{encoding}' not understood, valid options: 'json', 'json-ext', 'msgpack-ext'"
+        )
