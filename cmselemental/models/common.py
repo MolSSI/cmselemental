@@ -9,9 +9,7 @@ from .base import ProtoModel, qcschema_draft
 if TYPE_CHECKING:
     from pydantic.typing import ReprArgs
 
-
-# Encoders, to be deprecated
-ndarray_encoder = {numpy.ndarray: lambda v: v.flatten().tolist()}
+__all__ = ["Provenance", "ComputeError", "FailedOperation"]
 
 
 class Provenance(ProtoModel):
@@ -36,22 +34,6 @@ class Provenance(ProtoModel):
 
         def schema_extra(schema, model):
             schema["$schema"] = qcschema_draft
-
-
-class DriverEnum(str, Enum):
-    """Allowed computation driver values."""
-
-    energy = "energy"
-    gradient = "gradient"
-    hessian = "hessian"
-    properties = "properties"
-
-    def derivative_int(self):
-        egh = ["energy", "gradient", "hessian", "third", "fourth", "fifth"]
-        if self == "properties":
-            return 0
-        else:
-            return egh.index(self)
 
 
 class ComputeError(ProtoModel):
