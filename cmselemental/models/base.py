@@ -9,6 +9,8 @@ from ..testing import compare_recursive
 from ..util import deserialize, serialize
 from ..util.autodocs import AutoPydanticDocGenerator
 
+__all__ = ["ProtoModel", "AutodocBaseSettings"]
+
 
 def _repr(self) -> str:
     return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
