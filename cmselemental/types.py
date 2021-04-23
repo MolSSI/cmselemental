@@ -1,6 +1,8 @@
 from typing import Any, Dict
 import numpy
 
+__all__ = ["Array"]
+
 
 class TypedArray(numpy.ndarray):
     @classmethod
