@@ -6,7 +6,6 @@ except ImportError:  # pragma: no cover
         "`conda install pydantic -c conda-forge` or `pip install pydantic`"
     )
 
-from . import types
 from .base import *
 from .common import *
 from .procedures import *
