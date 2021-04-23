@@ -1,5 +1,3 @@
-import re
-
 from . import _version
 
 __all__ = ["get_information", "provenance_stamp"]
@@ -11,16 +9,16 @@ __info = {"version": versions["version"], "git_revision": versions["full-revisio
 
 def get_information(key):
     """
-    Obtains a variety of runtime information about QCEngine.
+    Obtains a variety of runtime information about CMSElemental.
     """
     key = key.lower()
     if key not in __info:
-        raise KeyError("Information key '{}' not understood.".format(key))
+        raise KeyError(f"Information key '{key}' not understood.")
 
     return __info[key]
 
 
-def provenance_stamp(creator, routine):
+def provenance_stamp(routine, creator="CMSElemental"):
     """Return dictionary satisfying QCSchema,
     https://github.com/MolSSI/QCSchema/blob/master/qcschema/dev/definitions.py#L23-L41
     with QCEngine's credentials for creator and version. The
