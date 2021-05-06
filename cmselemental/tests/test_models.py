@@ -37,13 +37,28 @@ def test_repr_failed_op():
     )
 
 
-def test_repr_optimization():
+def test_repr_proc_input():
 
     opt = ProcInput(
         **{
             "id": "some_id",
             "engine": "some_engine",
             "engine_version": "1.0.0",
+        }
+    )
+
+    assert "provenance" in str(opt)
+    assert "schema_name" in str(opt)
+    assert "schema_version" in str(opt)
+
+
+def test_repr_proc_output():
+
+    opt = ProcOutput(
+        **{
+            "stdout": "stdout",
+            "stderr": "stderr",
+            "success": False,
         }
     )
 
