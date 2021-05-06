@@ -13,11 +13,11 @@ from cmselemental.models import (
 @pytest.mark.skip(reason="no way of currently testing this")
 def test_repr_provenance(request):
 
-    prov = Provenance(creator="qcel", version="v0.3.2")
+    prov = Provenance(creator="cmsel", version="v0.3.2")
     drop_qcsk(prov, request.node.name)
 
-    assert "qcel" in str(prov)
-    assert "qcel" in repr(prov)
+    assert "cmsel" in str(prov)
+    assert "cmsel" in repr(prov)
 
 
 def test_repr_compute_error():
