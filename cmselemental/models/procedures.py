@@ -69,16 +69,13 @@ class ProcOutput(ProtoModel):
     stderr: Optional[str] = Field(
         None, description="The standard error of the program."
     )
-    warnings: Optional[str] = Field(
-        None, description="Warning messages."
-    )
+    warnings: Optional[str] = Field(None, description="Warning messages.")
     success: bool = Field(
         ...,
         description="The success of a given programs execution. If False, other fields may be blank.",
     )
     error: Optional[ComputeError] = Field(None, description=str(ComputeError.__doc__))
-    provenance: Optional[Provenance] = Field(..., description=str(Provenance.__doc__)
-    )
+    provenance: Optional[Provenance] = Field(..., description=str(Provenance.__doc__))
     extras: Optional[Dict[str, Any]] = Field(
         {}, description="Extra fields that are not part of the schema."
     )
