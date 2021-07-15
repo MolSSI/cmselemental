@@ -9,6 +9,8 @@ from ..testing import compare_recursive
 from ..util import deserialize, serialize
 from ..util.autodocs import AutoPydanticDocGenerator
 
+cmsschema_draft = "http://json-schema.org/draft-04/schema#"
+
 __all__ = ["ProtoModel", "AutodocBaseSettings"]
 
 
@@ -191,6 +193,3 @@ class ProtoModel(BaseModel):
 class AutodocBaseSettings(BaseSettings):
     def __init_subclass__(cls) -> None:
         cls.__doc__ = AutoPydanticDocGenerator(cls, always_apply=True)
-
-
-qcschema_draft = "http://json-schema.org/draft-04/schema#"
