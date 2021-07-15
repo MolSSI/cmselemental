@@ -41,6 +41,8 @@ def test_repr_proc_input():
 
     opt = ProcInput(
         **{
+            "schema_name": "some_schema",
+            "schema_version": 2,
             "id": "some_id",
             "engine": "some_engine",
             "engine_version": "1.0.0",
@@ -56,6 +58,8 @@ def test_repr_proc_output():
 
     opt = ProcOutput(
         **{
+            "schema_name": "my_schema",
+            "schema_version": 1,
             "stdout": "stdout",
             "stderr": "stderr",
             "success": False,

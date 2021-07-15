@@ -14,6 +14,8 @@ def test_optim_qcel():
 
     class OptimizationInput(cmselemental.models.ProcInput):
 
+        schema_name: str = "qcschema"
+        schema_version: int = 2
         protocols: OptimizationProtocols = OptimizationProtocols()
         input_specification: QCInputSpecification = ...
         initial_molecule: Molecule = ...
