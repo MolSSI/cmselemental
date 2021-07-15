@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, Any, Dict, Optional, Union
 import numpy
 from pydantic import Field
 
-from .base import ProtoModel, qcschema_draft
+from .base import ProtoModel, cmsschema_draft
 
 if TYPE_CHECKING:
     from pydantic.typing import ReprArgs
@@ -33,7 +33,7 @@ class Provenance(ProtoModel):
         extra: str = "allow"
 
         def schema_extra(schema, model):
-            schema["$schema"] = qcschema_draft
+            schema["$schema"] = cmsschema_draft
 
 
 class ComputeError(ProtoModel):
