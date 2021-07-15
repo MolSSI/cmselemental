@@ -4,7 +4,6 @@ CMSElemental
 [![CI](https://github.com/MolSSI/cmselemental/actions/workflows/CI.yaml/badge.svg)](https://github.com/MolSSI/cmselemental/actions/workflows/CI.yaml)
 [![codecov](https://codecov.io/gh/MolSSI/cmslemental/branch/main/graph/badge.svg)](https://codecov.io/gh/MolSSI/cmslemental/branch/main)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/MolSSI/cmselemental.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/MolSSI/cmselemental/context:python)
-[![docs](https://github.com/MolSSI/cmselemental/actions/workflows/doc.yaml/badge.svg)](https://molssi.github.io/cmselemental)
 
 A python package which provides data models & tools for the Computational Molecular Sciences (CMS).
 
