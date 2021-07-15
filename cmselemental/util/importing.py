@@ -2,7 +2,6 @@ import os
 import shutil
 import sys
 from typing import List, Union, Callable
-import warnings
 import functools
 import importlib
 
@@ -63,10 +62,9 @@ def which_import(
     ModuleNotFoundError
         When `raise_error=True` and module not found. Raises generic message plus any `raise_msg`.
     """
-    from importlib import util
 
     try:
-        module_spec = util.find_spec(module, package=package)
+        module_spec = importlib.util.find_spec(module, package=package)
     except ModuleNotFoundError:
         module_spec = None
 

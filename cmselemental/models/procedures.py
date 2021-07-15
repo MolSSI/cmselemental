@@ -1,7 +1,5 @@
-from enum import Enum
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
-
-from pydantic import Field, constr, validator
+from typing import Any, Dict, Optional
+from pydantic import Field, constr
 
 from ..extras import provenance_stamp
 from .base import ProtoModel

@@ -1,7 +1,6 @@
 from enum import Enum
-from typing import TYPE_CHECKING, Any, Dict, Optional, Union
+from typing import TYPE_CHECKING, Any, Dict, Optional
 
-import numpy
 from pydantic import Field
 
 from .base import ProtoModel, cmsschema_draft
