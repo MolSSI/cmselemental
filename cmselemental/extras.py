@@ -19,11 +19,6 @@ def get_information(key):
 
 
 def provenance_stamp(routine, creator="CMSElemental"):
-    """Return dictionary satisfying QCSchema,
-    https://github.com/MolSSI/QCSchema/blob/master/qcschema/dev/definitions.py#L23-L41
-    with QCEngine's credentials for creator and version. The
-    generating routine's name is passed in through `routine`.
-    """
     return {
         "creator": creator,
         "version": get_information("version"),
