@@ -181,7 +181,7 @@ class ProtoModel(BaseModel):
         other : Model
             The model to compare to.
         **kwargs
-            Additional kwargs to pass to ``qcelemental.compare_recursive``.
+            Additional kwargs to pass.
         Returns
         -------
         bool
