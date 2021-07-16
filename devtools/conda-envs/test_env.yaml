@@ -16,5 +16,7 @@ dependencies:
 
     # Pip-only installs
   - pip:
+    - numpy
+    - pydantic
     - qcelemental
 
