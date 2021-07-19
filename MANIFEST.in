@@ -4,4 +4,4 @@ include CODE_OF_CONDUCT.md
 include versioneer.py
 
 graft cmselemental
-global-exclude *.py[cod] __pycache__ *.so
+global-exclude *.py[cod] __pycache__ *.soinclude cmselemental/_version.py
