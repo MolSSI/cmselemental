@@ -40,7 +40,7 @@ setup(
     include_package_data=True,
     # Allows `setup.py test` to work correctly with pytest
     setup_requires=[] + pytest_runner,
-    install_requires=['numpy', 'pydantic'],
+    install_requires=["numpy", "pydantic"],
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
     ],
