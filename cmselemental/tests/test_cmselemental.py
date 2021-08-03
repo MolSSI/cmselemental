@@ -4,7 +4,6 @@ Unit and regression test for the cmselemental package.
 
 # Import package, test suite, and other packages as needed
 import cmselemental
-import pytest
 import sys
 
 
