@@ -10,4 +10,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.2.0]
 
-- ([:pr:`4`](https://github.com/MolSSI/cmselemental/pull/4)) Add serialization support for YAML
+- ([`:pr:4`](https://github.com/MolSSI/cmselemental/pull/4)) Add serialization support for YAML
