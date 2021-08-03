@@ -1,5 +1,5 @@
 from typing import Any, Dict, Optional
-from pydantic import Field, constr
+from pydantic import Field
 
 from ..extras import provenance_stamp
 from .base import ProtoModel
