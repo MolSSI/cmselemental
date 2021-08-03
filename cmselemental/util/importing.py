@@ -2,6 +2,7 @@ import os
 import shutil
 import sys
 from typing import List, Union, Callable
+from types import ModuleType
 import functools
 import importlib
 
@@ -157,3 +158,29 @@ def parse_version(*args, **kwargs):
     import pkg_resources
 
     return pkg_resources.parse_version(*args, **kwargs)
+
+
+def yaml_import(raise_error: bool = False) -> ModuleType:
+    """Uses which_import to import either PyYAML or ramuel.yaml (in that order) if module is found.
+    Returns
+    -------
+    ModuleType or None
+        By default, returns module if found or None if not.
+    Raises
+    ------
+    ModuleNotFoundError
+        When `raise_error=True` and module not found. Raises generic message plus `raise_msg`.
+    """
+    from importlib import import_module
+
+    raise_msg = "PyYAML or ruamel.yaml is required. Solve by installing either: `pip install pyyaml` or `pip install ruamel.yaml`"
+
+    if which_import(
+        "yaml",
+        raise_error=False,
+        return_bool=True,
+    ):
+        return import_module("yaml")
+    elif which_import("ruamel.yaml", raise_error=raise_error, raise_msg=raise_msg):
+        return import_module("ruamel.yaml")
+    return None
