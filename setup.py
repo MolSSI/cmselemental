@@ -41,6 +41,16 @@ setup(
     # Allows `setup.py test` to work correctly with pytest
     setup_requires=[] + pytest_runner,
     install_requires=["numpy", "pydantic"],
+    extras_require={
+        "tests": [
+            "pytest >= 4.0.0",
+            "pytest-cov",
+        ],
+        "yaml": [
+            "pyyaml",  # supports YAML 1.1
+            # 'ruamel.yaml', # supports YAML 1.2
+        ],
+    },
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
     ],
