@@ -91,7 +91,7 @@ class ProtoModel(BaseModel):
         if encoding is None:
             if path.suffix in [".json", ".js"]:
                 encoding = "json"
-            elif path.suffix in [".yaml", "yml"]:
+            elif path.suffix in [".yaml", ".yml"]:
                 encoding = "yaml"
             elif path.suffix in [".msgpack"]:
                 encoding = "msgpack-ext"
