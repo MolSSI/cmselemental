@@ -92,25 +92,24 @@ class ProtoModel(BaseModel):
         if encoding is None:
             if path.suffix in [".json", ".js"]:
                 encoding = "json"
-            elif path.suffix in [".yaml", ".yml"]:
-                encoding = "yaml"
             elif path.suffix in [".msgpack"]:
                 encoding = "msgpack-ext"
             elif path.suffix in [".pickle"]:
                 encoding = "pickle"
+            elif path.suffix in [".yaml", ".yml"]:
+                encoding = "yaml"
             elif path.suffix in [".hdf5", ".h5"]:
-                from ..util import hdf
-
-                return hdf.read_file(path)
+                encoding = "hdf5"
             else:
                 raise TypeError(
                     "Could not infer `encoding`, please provide a `encoding` for this file."
                 )
+        if encoding == "yaml":
+            return cls.parse_raw(path.read_text(), encoding=encoding)
         elif encoding in ("hdf5", "h5"):
             from ..util import hdf
 
-            return hdf.read_file(path)
-
+            return cls.parse_obj(hdf.read_file(path))
         return cls.parse_raw(path.read_bytes(), encoding=encoding)
 
     def write_file(
