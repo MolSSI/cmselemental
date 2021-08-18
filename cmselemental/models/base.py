@@ -9,7 +9,7 @@ from ..testing import compare_recursive
 from ..util import deserialize, serialize, yaml_import
 from ..util.autodocs import AutoPydanticDocGenerator
 
-cmsschema_draft = "http://json-schema.org/draft-04/schema#"
+cmsschema_draft = "http://json-schema.org/draft-07/schema#"
 
 __all__ = ["ProtoModel", "AutodocBaseSettings"]
 
@@ -26,6 +26,10 @@ class ProtoModel(BaseModel):
         serialize_default_excludes: Set = set()
         serialize_skip_defaults: bool = False
         force_skip_defaults: bool = False
+
+        def schema_extra(schema, model):
+            # below addresses the draft-04 issue until https://github.com/samuelcolvin/pydantic/issues/1478 .
+            schema["$schema"] = cmsschema_draft
 
     def __init_subclass__(cls, **kwargs) -> None:
         super().__init_subclass__(**kwargs)
