@@ -9,7 +9,7 @@ from ..testing import compare_recursive
 from ..util import deserialize, serialize, yaml_import
 from ..util.autodocs import AutoPydanticDocGenerator
 
-cmsschema_draft = "http://json-schema.org/draft-04/schema#"
+cmsschema_draft = "http://json-schema.org/draft-07/schema#"
 
 __all__ = ["ProtoModel", "AutodocBaseSettings"]
 
@@ -26,6 +26,10 @@ class ProtoModel(BaseModel):
         serialize_default_excludes: Set = set()
         serialize_skip_defaults: bool = False
         force_skip_defaults: bool = False
+
+        def schema_extra(schema, model):
+            # below addresses the draft-04 issue until https://github.com/samuelcolvin/pydantic/issues/1478 .
+            schema["$schema"] = cmsschema_draft
 
     def __init_subclass__(cls, **kwargs) -> None:
         super().__init_subclass__(**kwargs)
@@ -80,14 +84,15 @@ class ProtoModel(BaseModel):
         path : Union[str, Path]
             The path to the file.
         encoding : str, optional
-            The type of the files, available types are: {'json', 'msgpack', 'pickle'}. Attempts to
+            The type of the files, available types are: {'json', 'msgpack', 'pickle', 'hdf5'}. Attempts to
             automatically infer the file type from the file extension if None.
         Returns
         -------
         Model
-            The requested model from a serialized format.
+            The requested model from a file format.
         """
         path = Path(path)
+
         if encoding is None:
             if path.suffix in [".json", ".js"]:
                 encoding = "json"
@@ -97,12 +102,54 @@ class ProtoModel(BaseModel):
                 encoding = "msgpack-ext"
             elif path.suffix in [".pickle"]:
                 encoding = "pickle"
+            elif path.suffix in [".yaml", ".yml"]:
+                encoding = "yaml"
+            elif path.suffix in [".hdf5", ".h5"]:
+                encoding = "hdf5"
             else:
                 raise TypeError(
                     "Could not infer `encoding`, please provide a `encoding` for this file."
                 )
+        if encoding == "yaml":
+            return cls.parse_raw(path.read_text(), encoding=encoding)
+        elif encoding in ("hdf5", "h5"):
+            from ..util import hdf
 
+            return cls.parse_obj(hdf.read_file(path))
         return cls.parse_raw(path.read_bytes(), encoding=encoding)
+
+    def write_file(
+        self,
+        path: Union[str, Path],
+        *,
+        encoding: str = None,
+        mode: str = "w",
+        **kwargs: Optional[Dict[str, Any]],
+    ):
+        """Write a Model to an output file.
+        Parameters
+        ----------
+        path : Union[str, Path]
+            The path to the file.
+        encoding : str, optional
+            The type of the files, available types are: {'json', 'msgpack', 'pickle', 'hdf5'}. Attempts to
+            automatically infer the file type from the file extension if None.
+        mode : str, optional
+            An optional string that specifies the mode in which the file is written. Overwrites existing
+            file by default (mode='w'). For appending to existing file, set mode='a'.
+        **kwargs: Dict[str, Any], optional
+            Additional keyword arguments passed to self.dict(), allows which fields to include, exclude, etc.
+        """
+        encoding = encoding or Path(path).suffix[1:]
+
+        if encoding in ["json", "js", "yaml", "yml"]:
+            stringified = self.serialize(encoding=encoding, **kwargs)
+            with open(path, mode) as fp:
+                fp.write(stringified)
+        elif encoding in ["hdf5", "h5"]:
+            from ..util import hdf
+
+            hdf.write_file(path, data=self.dict(**kwargs), mode=mode)
 
     def dict(
         self, *, ser_kwargs: Dict[str, Any] = {}, **kwargs: Dict[str, Any]
@@ -189,6 +236,11 @@ class ProtoModel(BaseModel):
             fdargs["exclude_none"] = exclude_none
 
         data = self.dict(**fdargs)
+
+        if encoding == "js":
+            encoding = "json"
+        elif encoding == "yml":
+            encoding = "yaml"
 
         return serialize(data, encoding=encoding, **kwargs)
 

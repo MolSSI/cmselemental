@@ -10,4 +10,5 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/) 
 
 ## [0.2.0]
 
-- ([`:pr:4`](https://github.com/MolSSI/cmselemental/pull/4)) Add serialization support for YAML
+- ([`:pr:4`](https://github.com/MolSSI/cmselemental/pull/4) Add serialization support for YAML
+- ([`:pr:5`](https://github.com/MolSSI/cmselemental/pull/5) Add support for writing, reading. and converting `ProtoModel` to/from HDF5 based on the [HDF5/JSON](https://hdf5-json.readthedocs.io) specification. Add `$schema` keyword to the generated `ProtoModel` schema.
