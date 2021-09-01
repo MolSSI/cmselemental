@@ -14,10 +14,6 @@ cmsschema_draft = "http://json-schema.org/draft-07/schema#"
 __all__ = ["ProtoModel", "AutodocBaseSettings"]
 
 
-def _repr(self) -> str:
-    return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
-
-
 class ProtoModel(BaseModel):
     class Config:
         allow_mutation: bool = False
@@ -35,11 +31,11 @@ class ProtoModel(BaseModel):
         super().__init_subclass__(**kwargs)
         cls.__doc__ = AutoPydanticDocGenerator(cls, always_apply=True)
 
-        if "pydantic" in cls.__repr__.__module__:
-            cls.__repr__ = _repr
+    def __repr__(self):
+        return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
 
-        if "pydantic" in cls.__str__.__module__:
-            cls.__str__ = _repr
+    def __str__(self):
+        return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
 
     @classmethod
     def parse_raw(cls, data: Union[bytes, str], *, encoding: str = None) -> "ProtoModel":  # type: ignore
