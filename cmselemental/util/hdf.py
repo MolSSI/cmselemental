@@ -117,31 +117,62 @@ def _wrap_homogenous_array(data):
     return numpy.array(data, dtype=dtype)
 
 
-def write_dict(hdfobj, data: dict):
+def write_dict(
+    hdfobj: "h5py._hl.files.File",
+    data: Dict[str, Any],
+    units_metadata: bool = True,
+    **kwargs,
+) -> None:
+    """
+    Writes a python dictionary to an HDF5 file. By default, any attribute that ends in '_units' is stored
+    as metadata in the hdf5 file. Can be turned off by setting units_metadata=False.
+
+    Parameters
+    ----------
+    hdfobj: h5py._hl.files.File
+        The hdf file object to write data to.
+    data: Dict[str, Any]
+        The dictionary of data to write.
+    units_metadata: bool
+        Treat any key ending in '_units' as metadata.
+    **kwargs: Optional[Dict[str, Any]], optional
+        Any additional keywords to pass to the constructor.
+
+    """
     for key, val in data.items():
         if isinstance(val, dict):
             grp = hdfobj.create_group(key)
             write_dict(grp, val)
-        elif "_units" not in key:  # Deal with units later
-            val = _wrap_homogenous_array(val)
-            hdfobj.create_dataset(name=key, data=val)
+        elif units_metadata:
+            if not key.endswith("_units"):  # Deal with units later
+                val = _wrap_homogenous_array(val)
+                hdfobj.create_dataset(name=key, data=val)
 
     # Save units as metadata
-    for key, val in data.items():
-        if "_units" in key:
-            array_name, _ = key.split("_units")
-            hdfobj[array_name].attrs[key] = val
+    if units_metadata:
+        for key, val in data.items():
+            if key.endswith("_units"):
+                array_name, _ = key.split("_units")
+                hdfobj[array_name].attrs[key] = val
 
 
-def _decode_hetero_array(array: numpy.ndarray) -> List[Any]:
-    for item in array:
-        if isinstance(item, (list, tuple, numpy.ndarray)):
-            item = _decode_hetero_array(item)
-        else:
-            pass
+def read_dict(hdfobj: "h5py._hl.files.File", **kwargs) -> Dict[str, Any]:
+    """
+    Converts an hdf file object to a python dictionary.
 
+    Parameters
+    ----------
+    hdfobj: h5py._hl.files.File
+        The hdf file object to read data from.
+    **kwargs: Optional[Dict[str, Any]], optional
+        Any additional keywords to pass to the constructor.
+    Returns
+    -------
+    Dict[str, Any]
+        A python dictionary that stores HDF5 data.
 
-def read_dict(hdfobj, **kwargs) -> Dict[str, Any]:
+    """
+
     data = {}
     for key in hdfobj.keys():
         if isinstance(hdfobj[key], h5py.Group):
@@ -149,6 +180,7 @@ def read_dict(hdfobj, **kwargs) -> Dict[str, Any]:
         elif isinstance(hdfobj[key], h5py.Dataset):
             data[key] = hdfobj[key][()]
 
+            # For MMEl, store key_units as metadata
             if key + "_units" in hdfobj[key].attrs.keys():
                 data[key + "_units"] = hdfobj[key].attrs[key + "_units"]
 
@@ -159,7 +191,7 @@ def read_dict(hdfobj, **kwargs) -> Dict[str, Any]:
                     if len(data[key].dtype) < 2:  # homogenous array
                         data[key] = data[key].astype("U")  # unicode default in py3
                     else:
-                        pass  # data[key] = _decode_hetero_array(data[key])
+                        pass  # do nothing with homogenous array
         else:
             raise ValueError(f"Data type not understood: {hdfobj[key]}")
     return data
