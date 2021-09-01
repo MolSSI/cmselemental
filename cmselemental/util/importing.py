@@ -171,7 +171,6 @@ def yaml_import(raise_error: bool = False) -> ModuleType:
     ModuleNotFoundError
         When `raise_error=True` and module not found. Raises generic message plus `raise_msg`.
     """
-    from importlib import import_module
 
     raise_msg = "PyYAML or ruamel.yaml is required. Solve by installing either: `pip install pyyaml` or `pip install ruamel.yaml`"
 
@@ -180,7 +179,7 @@ def yaml_import(raise_error: bool = False) -> ModuleType:
         raise_error=False,
         return_bool=True,
     ):
-        return import_module("yaml")
+        return importlib.import_module("yaml")
     elif which_import("ruamel.yaml", raise_error=raise_error, raise_msg=raise_msg):
-        return import_module("ruamel.yaml")
+        return importlib.import_module("ruamel.yaml")
     return None
