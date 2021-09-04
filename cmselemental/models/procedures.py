@@ -57,6 +57,7 @@ class ProcOutput(ProtoModel):
         None, description="The standard error of the program."
     )
     warnings: Optional[str] = Field(None, description="Warning messages.")
+    log: Optional[str] = Field(None, description="Logging info.")
     success: bool = Field(
         ...,
         description="The success of a given programs execution. If False, other fields may be blank.",
