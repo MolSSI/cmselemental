@@ -14,6 +14,11 @@ cmsschema_draft = "http://json-schema.org/draft-07/schema#"
 __all__ = ["ProtoModel", "AutodocBaseSettings"]
 
 
+class classproperty(property):
+    def __get__(self, cls, owner):
+        return classmethod(self.fget).__get__(None, owner)()
+
+
 class ProtoModel(BaseModel):
     class Config:
         allow_mutation: bool = False
@@ -24,7 +29,7 @@ class ProtoModel(BaseModel):
         force_skip_defaults: bool = False
 
         def schema_extra(schema, model):
-            # below addresses the draft-04 issue until https://github.com/samuelcolvin/pydantic/issues/1478 .
+            # below addresses the draft issue until https://github.com/samuelcolvin/pydantic/issues/1478 .
             schema["$schema"] = cmsschema_draft
 
     def __init_subclass__(cls, **kwargs) -> None:
@@ -36,6 +41,14 @@ class ProtoModel(BaseModel):
 
     def __str__(self):
         return f'{self.__repr_name__()}({self.__repr_str__(", ")})'
+
+    @classproperty
+    def default_schema_name(cls) -> Union[str, None]:
+        """Returns default schema name if found."""
+        try:
+            return cls.schema()["properties"]["schema_name"]["default"]
+        except Exception:
+            return None
 
     @classmethod
     def parse_raw(cls, data: Union[bytes, str], *, encoding: str = None) -> "ProtoModel":  # type: ignore
