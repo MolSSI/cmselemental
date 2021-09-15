@@ -8,15 +8,11 @@ from pydantic import BaseModel, BaseSettings
 from ..testing import compare_recursive
 from ..util import deserialize, serialize, yaml_import
 from ..util.autodocs import AutoPydanticDocGenerator
+from ..util.decorators import classproperty
 
 cmsschema_draft = "http://json-schema.org/draft-07/schema#"
 
 __all__ = ["ProtoModel", "AutodocBaseSettings"]
-
-
-class classproperty(property):
-    def __get__(self, cls, owner):
-        return classmethod(self.fget).__get__(None, owner)()
 
 
 class ProtoModel(BaseModel):
