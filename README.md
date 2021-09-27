@@ -6,26 +6,14 @@ CMSElemental
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/MolSSI/cmselemental.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/MolSSI/cmselemental/context:python)
 
 A python package which provides data models & tools for the Computational Molecular Sciences (CMS).
+CMSElemental provides:
 
-# Base Models
-The most fundamental model is `ProtoModel`, a subclass of the [pydantic](https://pydantic-docs.helpmanual.io) `BaseModel`, which provides commonly used methods in CMS.
-```python
-from cmselemental.models import ProtoModel
+- Pydantic models:
+  - Base models: primarily `ProtoModel`, a subclass of the [pydantic](https://pydantic-docs.helpmanual.io) `BaseModel`, which provides commonly used methods in CMS for data parsing, validation, and serializatio>
+  - Procedure models: for storing generic intput/output data associated with CMS procedures.
+  - Common models: a miscellaneous collection of frequently used models in CMS.
 
-class Model(ProtoModel):
-    ...
-
-obj = Model(...)
-is_same = obj.compare(other_obj)
-stringified = obj.json()
-data = obj.dict()
-```
-
-# Serialization/deserialization
-Routines for serializing to popular formats like JSON and YAML are available, with support for encoding Numpy arrays. 
-```python
-from cmselemental.util import serialize, deserialize
-
-stringified = serialize(data, encodding="json", indent=4)
-data = deserialize(stringified, encoding="json")
-```
+- File I/O methods:
+  - JSON: support for JSON schema (draft-07)
+  - YAML: support for YAML 1.1 (PyYAML) and 1.2 (ruamel.yaml)
+  - HDF5: support for HDF5 schema and the HDF5-JSON specification
