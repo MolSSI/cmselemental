@@ -3,8 +3,8 @@ import pytest
 from cmselemental.models import (
     ComputeError,
     FailedOperation,
-    ProcInput,
-    ProcOutput,
+    InputProc,
+    OutputProc,
     ProtoModel,
     Provenance,
 )
@@ -39,7 +39,7 @@ def test_repr_failed_op():
 
 def test_repr_proc_input():
 
-    opt = ProcInput(
+    opt = InputProc(
         **{
             "schema_name": "some_schema",
             "schema_version": 2,
@@ -56,7 +56,7 @@ def test_repr_proc_input():
 
 def test_repr_proc_output():
 
-    opt = ProcOutput(
+    opt = OutputProc(
         **{
             "schema_name": "my_schema",
             "schema_version": 1,

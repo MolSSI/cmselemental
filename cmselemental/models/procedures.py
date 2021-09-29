@@ -8,10 +8,10 @@ from .common import (
     Provenance,
 )
 
-__all__ = ["ProcInput", "ProcOutput"]
+__all__ = ["InputProc", "OutputProc"]
 
 
-class ProcInput(ProtoModel):
+class InputProc(ProtoModel):
     id: Optional[str] = None
     hash_index: Optional[str] = None
     schema_name: str = Field(  # type: ignore
@@ -40,8 +40,8 @@ class ProcInput(ProtoModel):
     )
 
 
-class ProcOutput(ProtoModel):
-    proc_input: Optional[ProcInput] = None
+class OutputProc(ProtoModel):
+    proc_input: Optional[InputProc] = None
     schema_name: str = Field(  # type: ignore
         ...,
         description=("The schema specification to which this model conforms."),

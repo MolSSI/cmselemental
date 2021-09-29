@@ -12,7 +12,7 @@ def test_optim_qcel():
     )
     from qcelemental.models import Molecule
 
-    class OptimizationInput(cmselemental.models.ProcInput):
+    class OptimizationInput(cmselemental.models.InputProc):
 
         schema_name: str = "qcschema"
         schema_version: int = 2
