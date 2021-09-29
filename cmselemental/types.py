@@ -30,7 +30,7 @@ class TypedArray(numpy.ndarray):
         elif dt is bool or numpy.issubdtype(dt, numpy.bool_):
             items = {"type": "boolean"}
         else:
-            items = {"Type": "array"}
+            items = {"type": "array"}
         field_schema.update(type="array", items=items)
 
 

@@ -1,6 +1,3 @@
-_h5py_nfound_msg = "Reading/writing hdf5 files requires h5py. \
-Solve by: pip install h5py"
-
 from typing import Dict, Any, List
 import numpy
 import json
