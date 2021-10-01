@@ -10,6 +10,7 @@ using_h5py = pytest.mark.skipif(
 )
 
 
+@using_h5py
 @pytest.mark.parametrize(
     "obj",
     [
