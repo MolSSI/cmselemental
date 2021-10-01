@@ -50,6 +50,10 @@ setup(
             "pyyaml",  # supports YAML 1.1
             # 'ruamel.yaml', # supports YAML 1.2
         ],
+        "hdf5": [
+            "h5py",
+            "h5json",
+        ],
     },
     classifiers=[
         "Development Status :: 3 - Alpha",
