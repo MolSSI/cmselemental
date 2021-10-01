@@ -54,6 +54,9 @@ setup(
             "h5py",
             "h5json",
         ],
+        "msgpack": [
+            "msgpack",
+        ],
     },
     classifiers=[
         "Development Status :: 3 - Alpha",
