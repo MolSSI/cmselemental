@@ -16,4 +16,5 @@ CMSElemental provides:
 - File I/O methods:
   - JSON: support for JSON schema ([draft-07](https://json-schema.org/specification-links.html#draft-7)).
   - YAML: support for YAML [1.1](https://yaml.org/spec/1.1) (PyYAML) and [1.2](https://yaml.org/spec/1.2) (ruamel.yaml).
+  - MessagePack: support for the msgpack data format.
   - HDF5: support for [HDF5](https://support.hdfgroup.org/HDF5/doc1.6/UG/03_Model.html) file schema and the [HDF5-JSON](https://github.com/HDFGroup/hdf5-json) specification.
