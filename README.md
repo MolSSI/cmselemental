@@ -9,7 +9,7 @@ A python package which provides data models & tools for the Computational Molecu
 CMSElemental provides:
 
 - Pydantic models:
-  - Base models: primarily `ProtoModel`, a subclass of the [pydantic](https://pydantic-docs.helpmanual.io) `BaseModel`, which provides commonly used methods in CMS for data parsing, validation, and serializatio>
+  - Base models: primarily `ProtoModel`, a subclass of the [pydantic](https://pydantic-docs.helpmanual.io) `BaseModel`, which provides commonly used methods in CMS for data parsing, validation, and serialization.
   - Procedure models: for storing generic intput/output data associated with CMS procedures.
   - Common models: a miscellaneous collection of frequently used models in CMS.
 
